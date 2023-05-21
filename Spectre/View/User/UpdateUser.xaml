@@ -1,0 +1,113 @@
+﻿<dx:ThemedWindow
+    x:Class="Spectre.View.UpdateUser"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    Title="UpdateUser"
+    Width="500"
+    Height="600"
+    FontSize="16"
+    ResizeMode="NoResize"
+    ShowIcon="False"
+    WindowStartupLocation="CenterScreen">
+
+    <Grid Grid.Column="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <dxe:TextEdit
+            Grid.Row="0"
+            Margin="0,0,0,5"
+            NullText="Username"
+            Text="{Binding SelectedUser.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <dxe:TextEdit
+            Grid.Row="1"
+            Margin="0,0,0,5"
+            VerticalAlignment="Top"
+            NullText="Password"
+            Text="{Binding SelectedUser.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <dxlc:GroupBox
+            Grid.Row="2"
+            Padding="0"
+            VerticalAlignment="Top"
+            Header="Permissions">
+            <dxlc:GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        FontSize="18"
+                        Text="Permissions" />
+                </DataTemplate>
+            </dxlc:GroupBox.HeaderTemplate>
+
+            <Grid Grid.Row="1" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <CheckBox
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Content="Add Sale"
+                    IsChecked="{Binding SelectedUser.CanAddSale}" />
+                <CheckBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Content="Delete Sale"
+                    IsChecked="{Binding SelectedUser.CanDeleteSale}" />
+                <CheckBox
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Content="Add Purchase"
+                    IsChecked="{Binding SelectedUser.CanAddPurchase}" />
+                <CheckBox
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Content="Delete Purchase"
+                    IsChecked="{Binding SelectedUser.CanDeletePurchase}" />
+                <CheckBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Content="Add Expanse"
+                    IsChecked="{Binding SelectedUser.CanAddExpanse}" />
+                <CheckBox
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Content="Delete Expanse"
+                    IsChecked="{Binding SelectedUser.CanDeleteExpanse}" />
+                <CheckBox
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Content="Manage Users"
+                    IsChecked="{Binding SelectedUser.ManageUsers}" />
+                <CheckBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Content="View Report"
+                    IsChecked="{Binding SelectedUser.CanViewReport}" />
+            </Grid>
+        </dxlc:GroupBox>
+
+        <dx:SimpleButton
+            Grid.Row="3"
+            Grid.Column="1"
+            Height="35"
+            HorizontalAlignment="Right"
+            Command="{Binding UpdateUserCommand}"
+            Content="Update User" />
+    </Grid>
+</dx:ThemedWindow>

@@ -1,0 +1,381 @@
+﻿<UserControl
+    x:Class="Spectre.View.Reports"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prop="clr-namespace:Spectre.Properties"
+    FontSize="16"
+    mc:Ignorable="d">
+
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Command="{Binding GetCollectionCommand}" EventName="Loaded" />
+    </dxmvvm:Interaction.Behaviors>
+
+    <dxlc:LayoutControl
+        Margin="0,5,0,0"
+        Padding="0"
+        Orientation="Vertical">
+        <dxlc:GroupBox
+            Padding="5"
+            VerticalAlignment="Top"
+            TitleVisibility="Collapsed">
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutGroup HorizontalAlignment="Left" Orientation="Horizontal">
+                    <dxlc:LayoutItem Label="Start Date">
+                        <dxe:DateEdit
+                            Grid.Column="0"
+                            Width="250"
+                            MinWidth="250"
+                            MaxHeight="250"
+                            Margin="0,0,5,0"
+                            DateTime="{Binding FromDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem Label="From Date">
+                        <dxe:DateEdit
+                            Grid.Column="1"
+                            Width="250"
+                            MinWidth="250"
+                            MaxHeight="250"
+                            Margin="0,0,5,0"
+                            DateTime="{Binding ToDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+                <dxlc:LayoutGroup HorizontalAlignment="Stretch" ItemSpace="30">
+
+                    <dxlc:LayoutItem HorizontalAlignment="Left">
+                        <RadioButton
+                            Grid.Column="0"
+                            VerticalAlignment="Bottom"
+                            Content="Today"
+                            GroupName="grp"
+                            IsChecked="{Binding Today, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem HorizontalAlignment="Left">
+                        <RadioButton
+                            Grid.Column="1"
+                            VerticalAlignment="Bottom"
+                            Content="Yesterday"
+                            GroupName="grp"
+                            IsChecked="{Binding Yesterday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem HorizontalAlignment="Left">
+                        <RadioButton
+                            Grid.Column="2"
+                            VerticalAlignment="Bottom"
+                            Content="All"
+                            GroupName="grp"
+                            IsChecked="{Binding All, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem HorizontalAlignment="Left">
+                        <RadioButton
+                            Grid.Column="3"
+                            VerticalAlignment="Bottom"
+                            Content="Between Dates"
+                            GroupName="grp"
+                            IsChecked="{Binding BetweenDates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    <dxlc:LayoutItem HorizontalAlignment="Right">
+                        <Button
+                            Grid.Column="4"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding GetCollectionCommand}"
+                            Content="Display" />
+                    </dxlc:LayoutItem>
+                </dxlc:LayoutGroup>
+            </dxlc:LayoutGroup>
+        </dxlc:GroupBox>
+
+        <dxlc:LayoutGroup Orientation="Horizontal">
+            <Grid>
+                <dxg:GridControl
+                    Name="expanseCollection"
+                    Grid.Column="0"
+                    VerticalAlignment="Stretch"
+                    ItemsSource="{Binding ExpanseCollection, IsAsync=True}"
+                    SelectionMode="Row">
+
+                    <dxg:GridControl.TotalSummary>
+                        <dxg:GridSummaryItem
+                            Alignment="Left"
+                            DisplayFormat="Count: {0}"
+                            FieldName="Date"
+                            SummaryType="Count" />
+                        <dxg:GridSummaryItem
+                            Alignment="Right"
+                            DisplayFormat="Total: {0:C}"
+                            FieldName="Amount"
+                            SummaryType="Sum" />
+                    </dxg:GridControl.TotalSummary>
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="AddedBy"
+                            Header="User"
+                            ReadOnly="True"
+                            Visible="{Binding Source={x:Static prop:Settings.Default}, Path=ShowUserInRecords}" />
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Date">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:DateEditSettings Mask="D" MaskUseAsDisplayFormat="True" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+
+                        <dxg:GridColumn
+                            Width="*"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Description"
+                            Header="Description"
+                            ReadOnly="True" />
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Amount"
+                            Header="Amount"
+                            ReadOnly="True">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings DisplayFormat="C" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                    </dxg:GridControl.Columns>
+                    <dxg:GridControl.View>
+                        <dxg:TableView
+                            AllowGrouping="False"
+                            AllowScrollAnimation="True"
+                            Header="Expanse Collection"
+                            HeaderPosition="SearchPanel"
+                            IncrementalSearchMode="Enabled"
+                            RowAnimationKind="Opacity"
+                            ScrollAnimationMode="EaseOut"
+                            ScrollingMode="Smart"
+                            SearchColumns="AddedBy;Description"
+                            SearchDelay="0"
+                            SearchPanelFindFilter="Contains"
+                            SearchPanelFindMode="Always"
+                            SearchPanelNullText="Search"
+                            ShowBandsPanel="False"
+                            ShowDataNavigator="False"
+                            ShowFilterPanelMode="Never"
+                            ShowFixedTotalSummary="True"
+                            ShowGroupPanel="False"
+                            ShowIndicator="False"
+                            ShowSearchPanelMode="Always"
+                            UseAnimationWhenExpanding="True">
+                            <dxg:TableView.RowCellMenuCustomizations>
+                                <dxb:BarButtonItem
+                                    Command="{Binding Path=DataContext.DeleteSelectedExpanseCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl, Mode=FindAncestor}}"
+                                    CommandParameter="{Binding ElementName=expanseCollection, Path=CurrentItem}"
+                                    Content="Delete" />
+                            </dxg:TableView.RowCellMenuCustomizations>
+                        </dxg:TableView>
+                    </dxg:GridControl.View>
+                </dxg:GridControl>
+            </Grid>
+            <Grid>
+                <dxg:GridControl
+                    Name="saleCollection"
+                    Grid.Column="1"
+                    VerticalAlignment="Stretch"
+                    ItemsSource="{Binding SaleCollection, IsAsync=True}"
+                    SelectionMode="Row">
+
+                    <dxg:GridControl.TotalSummary>
+                        <dxg:GridSummaryItem
+                            Alignment="Left"
+                            DisplayFormat="Count: {0}"
+                            FieldName="Date"
+                            SummaryType="Count" />
+                        <dxg:GridSummaryItem
+                            Alignment="Right"
+                            DisplayFormat="Total: {0:C}"
+                            FieldName="Amount"
+                            SummaryType="Sum" />
+                    </dxg:GridControl.TotalSummary>
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="AddedBy"
+                            Header="User"
+                            ReadOnly="True"
+                            Visible="{Binding Source={x:Static prop:Settings.Default}, Path=ShowUserInRecords}" />
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Date">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:DateEditSettings Mask="D" MaskUseAsDisplayFormat="True" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn
+                            Width="*"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Description"
+                            Header="Description"
+                            ReadOnly="True" />
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Amount"
+                            Header="Amount"
+                            ReadOnly="True">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings DisplayFormat="C" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                    </dxg:GridControl.Columns>
+                    <dxg:GridControl.View>
+                        <dxg:TableView
+                            AllowGrouping="False"
+                            AllowScrollAnimation="True"
+                            Header="Sale Collection"
+                            HeaderPosition="SearchPanel"
+                            IncrementalSearchMode="Enabled"
+                            RowAnimationKind="Opacity"
+                            ScrollAnimationMode="EaseOut"
+                            ScrollingMode="Smart"
+                            SearchColumns="AddedBy;Description"
+                            SearchDelay="0"
+                            SearchPanelFindFilter="Contains"
+                            SearchPanelFindMode="Always"
+                            SearchPanelNullText="Search"
+                            ShowBandsPanel="False"
+                            ShowDataNavigator="False"
+                            ShowFilterPanelMode="Never"
+                            ShowFixedTotalSummary="True"
+                            ShowGroupPanel="False"
+                            ShowIndicator="False"
+                            ShowSearchPanelMode="Always"
+                            UseAnimationWhenExpanding="True">
+                            <dxg:TableView.RowCellMenuCustomizations>
+                                <dxb:BarButtonItem
+                                    Command="{Binding Path=DataContext.DeleteSelectedSaleCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl, Mode=FindAncestor}}"
+                                    CommandParameter="{Binding ElementName=saleCollection, Path=CurrentItem}"
+                                    Content="Delete" />
+                            </dxg:TableView.RowCellMenuCustomizations>
+                        </dxg:TableView>
+                    </dxg:GridControl.View>
+                </dxg:GridControl>
+            </Grid>
+            <Grid>
+                <dxg:GridControl
+                    Name="purchaseCollection"
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    VerticalAlignment="Stretch"
+                    ItemsSource="{Binding PurchaseCollection, IsAsync=True}"
+                    SelectionMode="Row">
+
+                    <dxg:GridControl.TotalSummary>
+                        <dxg:GridSummaryItem
+                            Alignment="Left"
+                            DisplayFormat="Count: {0}"
+                            FieldName="Date"
+                            SummaryType="Count" />
+                        <dxg:GridSummaryItem
+                            Alignment="Right"
+                            DisplayFormat="Total: {0:C}"
+                            FieldName="Amount"
+                            SummaryType="Sum" />
+                    </dxg:GridControl.TotalSummary>
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="AddedBy"
+                            Header="User"
+                            ReadOnly="True"
+                            Visible="{Binding Source={x:Static prop:Settings.Default}, Path=ShowUserInRecords}" />
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Date">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:DateEditSettings Mask="D" MaskUseAsDisplayFormat="True" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                        <dxg:GridColumn
+                            Width="*"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Description"
+                            Header="Description"
+                            ReadOnly="True" />
+                        <dxg:GridColumn
+                            Width="Auto"
+                            AllowColumnFiltering="False"
+                            AllowEditing="False"
+                            AllowSorting="False"
+                            FieldName="Amount"
+                            Header="Amount"
+                            ReadOnly="True">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings DisplayFormat="C" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+                    </dxg:GridControl.Columns>
+                    <dxg:GridControl.View>
+                        <dxg:TableView
+                            AllowGrouping="False"
+                            AllowScrollAnimation="True"
+                            Header="Purchase Collection"
+                            HeaderPosition="SearchPanel"
+                            IncrementalSearchMode="Enabled"
+                            RowAnimationKind="Opacity"
+                            ScrollAnimationMode="EaseOut"
+                            ScrollingMode="Smart"
+                            SearchColumns="AddedBy;Description"
+                            SearchDelay="0"
+                            SearchPanelFindFilter="Contains"
+                            SearchPanelFindMode="Always"
+                            SearchPanelNullText="Search"
+                            ShowBandsPanel="False"
+                            ShowDataNavigator="False"
+                            ShowFilterPanelMode="Never"
+                            ShowFixedTotalSummary="True"
+                            ShowGroupPanel="False"
+                            ShowIndicator="False"
+                            ShowSearchPanelMode="Always"
+                            UseAnimationWhenExpanding="True">
+                            <dxg:TableView.RowCellMenuCustomizations>
+                                <dxb:BarButtonItem
+                                    Command="{Binding Path=DataContext.DeleteSelectedPurchaseCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl, Mode=FindAncestor}}"
+                                    CommandParameter="{Binding ElementName=purchaseCollection, Path=CurrentItem}"
+                                    Content="Delete" />
+                            </dxg:TableView.RowCellMenuCustomizations>
+                        </dxg:TableView>
+                    </dxg:GridControl.View>
+                </dxg:GridControl>
+            </Grid>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</UserControl>

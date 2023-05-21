@@ -1,0 +1,63 @@
+﻿<UserControl
+    x:Class="Spectre.View.PerformanceUC"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:local="clr-namespace:Spectre.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <dxlc:GroupBox TitleVisibility="Collapsed">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                FontSize="20"
+                Text="{Binding Identifier}" />
+
+            <Separator Grid.Row="1" Margin="0,5,0,5" />
+
+            <Grid Grid.Row="2" Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Sale: " />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Right">
+                    <Run Text="{Binding Sale, StringFormat=N2}" />
+                </TextBlock>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Purchase: " />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Right">
+                    <Run Text="{Binding Purchase, StringFormat=N2}" />
+                </TextBlock>
+            </Grid>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Expanse: " />
+                <TextBlock Grid.Column="1" HorizontalAlignment="Right">
+                    <Run Text="{Binding Expanse, StringFormat=N2}" />
+                </TextBlock>
+            </Grid>
+        </Grid>
+    </dxlc:GroupBox>
+</UserControl>

@@ -1,0 +1,257 @@
+﻿<UserControl
+    x:Class="Spectre.View.Sale"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:local="clr-namespace:Spectre.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prop="clr-namespace:Spectre.Properties"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    FontSize="16"
+    mc:Ignorable="d">
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Command="{Binding GetSaleCollectionCommand}" EventName="Loaded" />
+    </dxmvvm:Interaction.Behaviors>
+    <Grid Margin="0,5,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <dxg:GridControl
+            Name="yesterdaySale"
+            Grid.Row="0"
+            VerticalAlignment="Stretch"
+            ItemsSource="{Binding YesterdaySaleCollection, IsAsync=True}"
+            SelectionMode="Row">
+
+            <dxg:GridControl.TotalSummary>
+                <dxg:GridSummaryItem
+                    Alignment="Left"
+                    DisplayFormat="Count: {0}"
+                    FieldName="Date"
+                    SummaryType="Count" />
+                <dxg:GridSummaryItem
+                    Alignment="Right"
+                    DisplayFormat="Total: {0:C}"
+                    FieldName="Amount"
+                    SummaryType="Sum" />
+            </dxg:GridControl.TotalSummary>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn
+                    Width="Auto"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="AddedBy"
+                    Header="User"
+                    ReadOnly="True"
+                    Visible="{Binding Source={x:Static prop:Settings.Default}, Path=ShowUserInRecords}" />
+                <dxg:GridColumn
+                    Width="Auto"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="Date">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:DateEditSettings Mask="D" MaskUseAsDisplayFormat="True" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn
+                    Width="*"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="Description"
+                    Header="Description"
+                    ReadOnly="True" />
+                <dxg:GridColumn
+                    Width="Auto"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="Amount"
+                    Header="Amount"
+                    ReadOnly="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="C" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+                <dxg:TableView
+                    AllowGrouping="False"
+                    AllowScrollAnimation="True"
+                    Header="Yesterday's Sale"
+                    HeaderPosition="SearchPanel"
+                    IncrementalSearchMode="Enabled"
+                    RowAnimationKind="Opacity"
+                    ScrollAnimationMode="EaseOut"
+                    ScrollingMode="Smart"
+                    SearchColumns="AddedBy;Description"
+                    SearchDelay="0"
+                    SearchPanelFindFilter="Contains"
+                    SearchPanelFindMode="Always"
+                    SearchPanelNullText="Search"
+                    ShowBandsPanel="False"
+                    ShowDataNavigator="False"
+                    ShowFilterPanelMode="Never"
+                    ShowFixedTotalSummary="True"
+                    ShowGroupPanel="False"
+                    ShowIndicator="False"
+                    ShowSearchPanelMode="Always"
+                    UseAnimationWhenExpanding="True">
+                    <dxg:TableView.RowCellMenuCustomizations>
+                        <dxb:BarButtonItem
+                            Command="{Binding Path=DataContext.DeleteYesterdaySelectedSaleCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl, Mode=FindAncestor}}"
+                            CommandParameter="{Binding ElementName=yesterdaySale, Path=CurrentItem}"
+                            Content="Delete" />
+                    </dxg:TableView.RowCellMenuCustomizations>
+                </dxg:TableView>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+
+        <Border Grid.Row="1" Padding="0,5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <dxe:DateEdit
+                    Grid.Row="0"
+                    Margin="0,0,0,5"
+                    Padding="0,10"
+                    DateTime="{Binding Sale.Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Mask="D"
+                    MaskUseAsDisplayFormat="True" />
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <dxe:TextEdit
+                        Grid.Column="0"
+                        Margin="0,0,5,0"
+                        Padding="0,10"
+                        EditValue="{Binding Sale.Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        MaskShowPlaceHolders="True"
+                        NullText="Sale Description" />
+                    <dxe:TextEdit
+                        Grid.Column="1"
+                        Margin="0,0,5,0"
+                        Padding="0,10"
+                        EditValue="{Binding Sale.Amount, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Mask="N2"
+                        MaskShowPlaceHolders="True"
+                        MaskUseAsDisplayFormat="True"
+                        NullText="Sale Amount" />
+                    <dx:SimpleButton
+                        Grid.Column="2"
+                        Command="{Binding AddSaleCommand}"
+                        Content="Save" />
+                </Grid>
+            </Grid>
+        </Border>
+
+        <dxg:GridControl
+            Name="todaydaySale"
+            Grid.Row="2"
+            VerticalAlignment="Stretch"
+            ItemsSource="{Binding TodaySaleCollection, IsAsync=True}"
+            SelectionMode="Row">
+
+            <dxg:GridControl.TotalSummary>
+                <dxg:GridSummaryItem
+                    Alignment="Left"
+                    DisplayFormat="Count: {0}"
+                    FieldName="Date"
+                    SummaryType="Count" />
+                <dxg:GridSummaryItem
+                    Alignment="Right"
+                    DisplayFormat="Total: {0:C}"
+                    FieldName="Amount"
+                    SummaryType="Sum" />
+            </dxg:GridControl.TotalSummary>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn
+                    Width="Auto"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="AddedBy"
+                    Header="User"
+                    ReadOnly="True"
+                    Visible="{Binding Source={x:Static prop:Settings.Default}, Path=ShowUserInRecords}" />
+                <dxg:GridColumn
+                    Width="Auto"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="Date">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:DateEditSettings Mask="D" MaskUseAsDisplayFormat="True" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+                <dxg:GridColumn
+                    Width="*"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="Description"
+                    Header="Description"
+                    ReadOnly="True" />
+                <dxg:GridColumn
+                    Width="Auto"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="Amount"
+                    Header="Amount"
+                    ReadOnly="True">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings DisplayFormat="C" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+                <dxg:TableView
+                    AllowGrouping="False"
+                    AllowScrollAnimation="True"
+                    Header="Today's Sale"
+                    HeaderPosition="SearchPanel"
+                    IncrementalSearchMode="Enabled"
+                    RowAnimationKind="Opacity"
+                    ScrollAnimationMode="EaseOut"
+                    ScrollingMode="Smart"
+                    SearchColumns="AddedBy;Description"
+                    SearchDelay="0"
+                    SearchPanelFindFilter="Contains"
+                    SearchPanelFindMode="Always"
+                    SearchPanelNullText="Search"
+                    ShowBandsPanel="False"
+                    ShowDataNavigator="False"
+                    ShowFilterPanelMode="Never"
+                    ShowFixedTotalSummary="True"
+                    ShowGroupPanel="False"
+                    ShowIndicator="False"
+                    ShowSearchPanelMode="Always"
+                    UseAnimationWhenExpanding="True">
+                    <dxg:TableView.RowCellMenuCustomizations>
+                        <dxb:BarButtonItem
+                            Command="{Binding Path=DataContext.DeleteTodaySelectedSaleCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl, Mode=FindAncestor}}"
+                            CommandParameter="{Binding ElementName=todaydaySale, Path=CurrentItem}"
+                            Content="Delete" />
+                    </dxg:TableView.RowCellMenuCustomizations>
+                </dxg:TableView>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+    </Grid>
+</UserControl>

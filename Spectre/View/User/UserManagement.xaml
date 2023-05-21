@@ -1,0 +1,190 @@
+﻿<UserControl
+    x:Class="Spectre.View.UserManagement"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    FontSize="16"
+    mc:Ignorable="d">
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:EventToCommand Command="{Binding GetDataCommand}" EventName="Loaded" />
+    </dxmvvm:Interaction.Behaviors>
+    <Grid Margin="0,5,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Margin="0,0,5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Margin="0,0,0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="0,0,5,0">
+                    <dxe:TextEdit
+                        Margin="0,0,0,5"
+                        NullText="Username"
+                        Text="{Binding NewUser.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <dxe:TextEdit NullText="Password" Text="{Binding NewUser.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <dx:SimpleButton
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Command="{Binding AddUserCommand}"
+                    Content="Add User" />
+            </Grid>
+
+            <dxlc:GroupBox
+                Grid.Row="1"
+                Padding="0"
+                VerticalAlignment="Top">
+                <dxlc:GroupBox.HeaderTemplate>
+                    <DataTemplate>
+                        <Grid Grid.Row="0" Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                FontSize="18"
+                                Text="Permissions" />
+                            <dxe:CheckEdit
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                IsChecked="{Binding Path=DataContext.IsAllChecked, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type dxlc:GroupBox}}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </DataTemplate>
+                </dxlc:GroupBox.HeaderTemplate>
+
+                <Grid Grid.Row="1" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <CheckBox
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="Add Sale"
+                        IsChecked="{Binding NewUser.CanAddSale}" />
+                    <CheckBox
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Content="Delete Sale"
+                        IsChecked="{Binding NewUser.CanDeleteSale}" />
+                    <CheckBox
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Content="Add Purchase"
+                        IsChecked="{Binding NewUser.CanAddPurchase}" />
+                    <CheckBox
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Content="Delete Purchase"
+                        IsChecked="{Binding NewUser.CanDeletePurchase}" />
+                    <CheckBox
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Content="Add Expanse"
+                        IsChecked="{Binding NewUser.CanAddExpanse}" />
+                    <CheckBox
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Content="Delete Expanse"
+                        IsChecked="{Binding NewUser.CanDeleteExpanse}" />
+                    <CheckBox
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Content="Manage Users"
+                        IsChecked="{Binding NewUser.ManageUsers}" />
+                    <CheckBox
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Content="View Report"
+                        IsChecked="{Binding NewUser.CanViewReport}" />
+                </Grid>
+            </dxlc:GroupBox>
+            <dx:SimpleButton
+                Grid.Row="2"
+                Command="{Binding GetDataCommand}"
+                Content="Refresh"
+                FontSize="16" />
+        </Grid>
+
+        <dxg:GridControl
+            Grid.Column="1"
+            VerticalAlignment="Stretch"
+            ItemsSource="{Binding UserList, IsAsync=True}"
+            SelectedItem="{Binding SelectedUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectionMode="Row">
+
+            <dxg:GridControl.TotalSummary>
+                <dxg:GridSummaryItem
+                    Alignment="Left"
+                    DisplayFormat="Count: {0}"
+                    FieldName="Username"
+                    SummaryType="Count" />
+            </dxg:GridControl.TotalSummary>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn
+                    Width="*"
+                    AllowColumnFiltering="False"
+                    AllowEditing="False"
+                    AllowSorting="False"
+                    FieldName="Username"
+                    Header="User"
+                    ReadOnly="True" />
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+                <dxg:TableView
+                    AllowGrouping="False"
+                    AllowScrollAnimation="True"
+                    Header="Users"
+                    HeaderPosition="SearchPanel"
+                    IncrementalSearchMode="Enabled"
+                    RowAnimationKind="Opacity"
+                    ScrollAnimationMode="EaseOut"
+                    ScrollingMode="Smart"
+                    SearchDelay="0"
+                    SearchPanelFindFilter="Contains"
+                    SearchPanelFindMode="Always"
+                    SearchPanelNullText="Search"
+                    ShowBandsPanel="False"
+                    ShowDataNavigator="False"
+                    ShowFilterPanelMode="Never"
+                    ShowFixedTotalSummary="True"
+                    ShowGroupPanel="False"
+                    ShowIndicator="False"
+                    ShowSearchPanelMode="Always"
+                    UseAnimationWhenExpanding="True">
+                    <dxg:TableView.RowCellMenuCustomizations>
+                        <dxb:BarButtonItem Command="{Binding Path=DataContext.UpdateUserWindowCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl, Mode=FindAncestor}}" Content="Update" />
+                        <dxb:BarButtonItem Command="{Binding Path=DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=dxg:GridControl, Mode=FindAncestor}}" Content="Delete" />
+                    </dxg:TableView.RowCellMenuCustomizations>
+                </dxg:TableView>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+    </Grid>
+</UserControl>

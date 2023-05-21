@@ -1,0 +1,141 @@
+﻿<dx:ThemedWindow
+    x:Class="Spectre.View.LoginWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converter="clr-namespace:Spectre.Converter"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    x:Name="LoginWindowScreen"
+    Title="Login"
+    Width="400"
+    Height="500"
+    FontSize="16"
+    ResizeMode="NoResize"
+    ShowIcon="False"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None">
+    <dx:ThemedWindow.Resources>
+        <converter:BooleanToInverseVisibilityConverter x:Key="BooleanToInverseVisibilityConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </dx:ThemedWindow.Resources>
+
+    <Grid Grid.Column="1" VerticalAlignment="Stretch">
+
+        <Grid
+            Grid.Row="1"
+            Margin="50,0,50,0"
+            VerticalAlignment="Center"
+            Visibility="{Binding DatabaseFound, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,0,0,20"
+                HorizontalAlignment="Center"
+                FontSize="36"
+                Text="Log In" />
+
+            <dxe:TextEdit
+                Grid.Row="1"
+                Margin="0,0,0,5"
+                NullText="Username"
+                Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <dxe:TextEdit.InputBindings>
+                    <KeyBinding
+                        Key="Enter"
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding ElementName=LoginWindowScreen}" />
+                </dxe:TextEdit.InputBindings>
+            </dxe:TextEdit>
+
+            <dxe:PasswordBoxEdit
+                Grid.Row="2"
+                Margin="0,0,0,30"
+                NullText="Password"
+                Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                ShowCapsLockWarningToolTip="True">
+                <dxe:PasswordBoxEdit.InputBindings>
+                    <KeyBinding
+                        Key="Enter"
+                        Command="{Binding LoginCommand}"
+                        CommandParameter="{Binding ElementName=LoginWindowScreen}" />
+                </dxe:PasswordBoxEdit.InputBindings>
+            </dxe:PasswordBoxEdit>
+
+            <dx:SimpleButton
+                Grid.Row="3"
+                Margin="0,0,0,5"
+                Padding="40,5,40,5"
+                HorizontalAlignment="Center"
+                Command="{Binding LoginCommand}"
+                CommandParameter="{Binding ElementName=LoginWindowScreen}"
+                Content="Login"
+                FontWeight="Bold"
+                KeyboardNavigation.AcceptsReturn="True" />
+
+            <dx:SimpleButton
+                Grid.Row="4"
+                HorizontalAlignment="Center"
+                Command="{Binding CloseWindowCommand}"
+                CommandParameter="{Binding ElementName=LoginWindowScreen}"
+                Content="Exit" />
+        </Grid>
+
+        <Grid
+            Grid.Row="1"
+            Margin="50,0,50,0"
+            VerticalAlignment="Center"
+            Visibility="{Binding DatabaseFound, Converter={StaticResource BooleanToInverseVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.Row="0"
+                HorizontalAlignment="Center"
+                FontSize="24"
+                Text="Database Not Found!" />
+            <TextBlock
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                FontSize="20"
+                Text="Select Database File?" />
+
+            <Grid
+                Grid.Row="2"
+                Margin="0,0,0,5"
+                HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <dx:SimpleButton
+                    Grid.Column="0"
+                    Margin="5"
+                    Command="{Binding SelectDatabaseCommand}"
+                    Content="Yes"
+                    FontWeight="Bold" />
+                <dx:SimpleButton
+                    Grid.Column="1"
+                    Margin="5"
+                    Command="{Binding CreateNewDataBaseCommand}"
+                    CommandParameter="{Binding ElementName=LoginWindowScreen}"
+                    Content="Create New"
+                    FontWeight="Bold" />
+            </Grid>
+            <dx:SimpleButton
+                Grid.Row="3"
+                HorizontalAlignment="Center"
+                Command="{Binding CloseWindowCommand}"
+                CommandParameter="{Binding ElementName=LoginWindowScreen}"
+                Content="Exit" />
+        </Grid>
+    </Grid>
+</dx:ThemedWindow>
