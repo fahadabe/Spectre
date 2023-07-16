@@ -10,7 +10,7 @@ This is a simple WPF app that allows users to manage their business's sales, exp
 - **Reporting:** Generate reports.
 - **User Management:** Add, update, and delete users and assign specific permissions.
 
-## Technologies Used
+## Tools & Technologies Used
 - DevExpress
 - Dapper
 - SQLite
